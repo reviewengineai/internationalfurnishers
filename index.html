@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>International Furnishers — Leave a Review</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --walnut:       #3d2314;
+    --mahogany:     #6b3a2a;
+    --amber:        #c17f3c;
+    --gold:         #d4a852;
+    --gold-light:   #e8c87a;
+    --cream:        #f4ebe0;
+    --cream-deep:   #e8d8c4;
+    --ivory:        #fdf8f0;
+    --warm-white:   #fffdf8;
+    --text-dark:    #1e1208;
+    --text-mid:     #5c3a28;
+    --text-soft:    #9a7a60;
+  }
+
+  html, body {
+    min-height: 100%;
+    background: var(--ivory);
+    font-family: 'Raleway', sans-serif;
+    color: var(--text-dark);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 65% 45% at 5% 0%, rgba(193,127,60,0.18) 0%, transparent 55%),
+      radial-gradient(ellipse 55% 55% at 95% 100%, rgba(61,35,20,0.12) 0%, transparent 55%),
+      radial-gradient(ellipse 80% 40% at 50% 60%, rgba(212,168,82,0.08) 0%, transparent 65%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Wood grain texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9 0.05' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.6;
+  }
+
+  .page {
+    position: relative;
+    z-index: 1;
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 44px 20px 60px;
+    gap: 0;
+  }
+
+  /* Brand header */
+  .brand-block {
+    text-align: center;
+    margin-bottom: 26px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.1s forwards;
+  }
+
+  .brand-monogram {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    height: 62px;
+    background: linear-gradient(145deg, var(--walnut) 0%, var(--mahogany) 100%);
+    border-radius: 4px;
+    margin-bottom: 14px;
+    box-shadow:
+      0 4px 20px rgba(61,35,20,0.35),
+      inset 0 1px 0 rgba(255,255,255,0.08),
+      0 0 0 3px rgba(212,168,82,0.25);
+    position: relative;
+  }
+  .brand-monogram::before {
+    content: 'IF';
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+  }
+
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--walnut);
+    letter-spacing: 0.02em;
+    line-height: 1.1;
+    margin-bottom: 5px;
+  }
+  .brand-tagline {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--amber);
+  }
+
+  .stars-wrap {
+    text-align: center;
+    margin-bottom: 22px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+  .stars {
+    font-size: 20px;
+    letter-spacing: 7px;
+    color: var(--gold);
+    filter: drop-shadow(0 1px 4px rgba(212,168,82,0.5));
+  }
+  .stars-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-top: 6px;
+  }
+
+  .card {
+    width: 100%;
+    max-width: 450px;
+    background: var(--warm-white);
+    border: 1px solid rgba(193,127,60,0.3);
+    border-radius: 6px;
+    padding: 28px 26px 24px;
+    box-shadow:
+      0 2px 0px rgba(61,35,20,0.06),
+      0 10px 40px rgba(61,35,20,0.12),
+      inset 0 1px 0 rgba(255,255,255,0.95);
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.45s forwards;
+  }
+
+  /* Top border – wood grain stripe */
+  .card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg,
+      var(--walnut) 0%,
+      var(--mahogany) 20%,
+      var(--amber) 45%,
+      var(--gold) 55%,
+      var(--mahogany) 80%,
+      var(--walnut) 100%
+    );
+    border-radius: 6px 6px 0 0;
+  }
+
+  /* Corner ornament */
+  .card-corner {
+    position: absolute;
+    top: 14px;
+    right: 18px;
+    font-size: 15px;
+    color: var(--cream-deep);
+    line-height: 1;
+    user-select: none;
+  }
+
+  .card-label {
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card-label::before,
+  .card-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cream-deep));
+  }
+  .card-label::after {
+    background: linear-gradient(90deg, var(--cream-deep), transparent);
+  }
+
+  .review-text {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14.5px;
+    font-weight: 400;
+    line-height: 1.82;
+    color: var(--text-dark);
+    min-height: 84px;
+    word-break: break-word;
+    transition: opacity 0.18s ease;
+  }
+  .review-text.fade { opacity: 0; }
+
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--cream-deep), transparent);
+    margin: 20px 0;
+  }
+
+  .btn-row { display: flex; gap: 10px; }
+
+  .btn-cta {
+    flex: 1;
+    padding: 15px 18px;
+    background: linear-gradient(135deg, var(--mahogany) 0%, var(--walnut) 100%);
+    color: #fff;
+    font-family: 'Raleway', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    box-shadow: 0 4px 18px rgba(61,35,20,0.32);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-cta::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    border-radius: 4px;
+  }
+  .btn-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(61,35,20,0.38); }
+  .btn-cta:active { transform: scale(0.97); }
+  .btn-cta.success {
+    background: linear-gradient(135deg, #4a7a52 0%, #2e5234 100%);
+    box-shadow: 0 4px 18px rgba(46,82,52,0.35);
+  }
+
+  .btn-refresh {
+    flex: 0 0 52px;
+    padding: 15px;
+    background: var(--cream);
+    color: var(--mahogany);
+    border: 1px solid var(--cream-deep);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .btn-refresh:hover { background: var(--cream-deep); color: var(--walnut); }
+  .btn-refresh:active { transform: scale(0.97); }
+  .btn-refresh svg { transition: transform 0.44s cubic-bezier(.4,2,.55,.9); }
+  .btn-refresh.spinning svg { transform: rotate(360deg); }
+
+  /* Address strip */
+  .address-strip {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.6s forwards;
+  }
+  .address-text {
+    font-size: 11px;
+    color: var(--text-soft);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+  .since-badge {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 4px 12px;
+    border: 1px solid var(--cream-deep);
+    border-radius: 2px;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--amber);
+    background: rgba(193,127,60,0.06);
+  }
+
+  .hint {
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text-soft);
+    margin-top: 14px;
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    min-height: 18px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.65s forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <div class="brand-block">
+    <div class="brand-monogram"></div>
+    <div class="brand-name">International Furnishers</div>
+    <div class="brand-tagline">Premium Collection · Varanasi</div>
+  </div>
+
+  <div class="stars-wrap">
+    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+    <div class="stars-label">Share your experience</div>
+  </div>
+
+  <div class="card">
+    <div class="card-corner">❖</div>
+    <div class="card-label">Your Review</div>
+    <div class="review-text" id="reviewText">Loading your review…</div>
+    <div class="divider"></div>
+    <div class="btn-row">
+      <button class="btn-cta" id="btnCopy" onclick="copyAndGo()">Copy &amp; Post on Google</button>
+      <button class="btn-refresh" id="btnRefresh" onclick="refreshReview()" title="Generate new review">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="23 4 23 10 17 10"></polyline>
+          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="address-strip">
+    <div class="address-text">D-35/76, Jangambari Road, near UCO Bank, Varanasi 221001</div>
+    <div class="since-badge">Trusted Since 2001</div>
+  </div>
+
+  <p class="hint" id="hint">Tap to copy your review, then paste it on Google.</p>
+
+</div>
+
+<script>
+var reviewLink = "https://search.google.com/local/writereview?ludocid=286898220527830578";
+
+// ─── CONTENT ARRAYS ───────────────────────────────────────────────
+
+var VISIT_OPENERS = [
+  "Visited International Furnishers on Jangambari Road in Varanasi and was thoroughly impressed",
+  "Have been a loyal customer of International Furnishers for over ten years now",
+  "Heard about International Furnishers from a family friend and the experience exceeded all expectations",
+  "Finally visited International Furnishers after passing by their showroom many times and it was worth every visit",
+  "Needed to furnish my new home in Varanasi and someone pointed me to International Furnishers",
+  "Was searching for quality furniture in Varanasi and International Furnishers came highly recommended",
+  "My neighbor bought furniture from International Furnishers and seeing the quality convinced me to visit",
+  "Came to International Furnishers specifically for a custom furniture requirement and left completely satisfied",
+  "Walked into International Furnishers on Jangambari Road not expecting much and came out thoroughly impressed",
+  "Have been coming to International Furnishers for every furniture need in my family for years",
+  "A colleague at work told me about International Furnishers and it turned out to be the best tip I received",
+  "Was renovating my home and International Furnishers was the first place I visited for furniture",
+  "Discovered International Furnishers while looking for solid wood furniture in Varanasi",
+  "My parents have been buying from International Furnishers for years and now I understand why",
+  "Tried a few other furniture shops in Varanasi before finally landing at International Furnishers",
+  "Came to International Furnishers for a double bed and ended up furnishing the whole bedroom",
+  "Was looking for furniture that would last decades, not just years, and International Furnishers delivered",
+  "Referred by three different people to International Furnishers and every one of them was right",
+  "Shifted to a new house in Varanasi and International Furnishers became my one-stop destination for all furniture",
+  "My sister bought her sofa set from International Furnishers and the quality convinced me to visit for my own home",
+  "After bad experiences at two furniture shops, International Furnishers restored my faith completely",
+  "Have been buying furniture from International Furnishers since they opened and the quality has never dipped",
+  "Was specifically looking for a temple unit with good craftsmanship and International Furnishers delivered perfectly",
+  "Needed a full living room set and International Furnishers had everything I needed under one roof",
+  "My architect recommended International Furnishers for premium furniture and the recommendation was spot on"
+];
+
+var PRODUCT_QUALITY = [
+  "The quality of their furniture is genuinely exceptional, solid and heavy as good furniture should be",
+  "All products use real plywood and genuine materials, no shortcuts or compromise anywhere",
+  "The bed I bought is incredibly solid and the finish is flawless after years of use",
+  "Their sofa sets are built to last, the frames are sturdy and the upholstery is premium quality",
+  "Every piece of furniture here feels substantial and well-crafted, nothing feels hollow or flimsy",
+  "The wood quality and joinery are at a level you rarely see in furniture shops in Varanasi",
+  "Their dining table set has been in my home for years and it looks as good as the day it arrived",
+  "The temple unit I bought is beautifully crafted with excellent attention to detail",
+  "All components are genuine and the hardware used in every piece is of the highest quality",
+  "The double bed frame they made is rock solid and the finish is impeccable even after daily use",
+  "Their corner tables and side tables have a heft and finish that speaks to real craftsmanship",
+  "The upholstery on their sofas is done with premium fabric and the stitching is genuinely immaculate",
+  "Every piece at International Furnishers has a weight and solidity that tells you instantly it is built to last",
+  "The lacquer finish on their wooden pieces is perfect and has not chipped or faded over years",
+  "Their wardrobe shutters and hinges are all top quality and work smoothly even after years of daily use",
+  "The veneer work on their furniture pieces is exceptionally well done and looks premium in any home",
+  "Every joint and corner in their furniture is precisely done, there is no sloppiness anywhere in the construction",
+  "The drawer mechanism on the chest of drawers I bought is smooth and solid years after purchase",
+  "Their king-size bed is exactly what solid wood furniture should look and feel like",
+  "The finish on every piece is consistent and beautiful, a true mark of skilled craftsmanship"
+];
+
+var CUSTOM_VARIETY = [
+  "They can make furniture completely as per your requirement and design, which is a rare and valuable service",
+  "The variety of furniture available in their showroom is truly extensive, something for every taste and budget",
+  "They custom-built my entire study setup exactly to my dimensions and design specifications",
+  "From classic to contemporary designs, their collection covers every style beautifully",
+  "The showroom has an impressive range from bedroom furniture to living room sets to temple units",
+  "They made a custom TV unit for my drawing room exactly as I had envisioned it",
+  "The ability to customize designs means you get exactly what fits your space and your taste",
+  "Their collection of dining tables and chair sets alone is more varied than any other shop I saw in Varanasi",
+  "I gave them a rough sketch and they turned it into a perfect custom wardrobe for my bedroom",
+  "The variety on display at their first-floor showroom is genuinely impressive and well curated",
+  "They accommodate every budget without compromising on the core quality of materials used",
+  "From minimal modern designs to ornate traditional pieces, their range covers every aesthetic",
+  "The custom sofa they built for my odd-shaped drawing room fit perfectly and looks stunning",
+  "Their bed designs range from simple classic to very elaborate carved wooden headboards",
+  "They made custom corner shelving for my study exactly to my specifications and the result was perfect",
+  "The flexibility to choose your own fabric, finish, and dimensions sets International Furnishers apart",
+  "Whether you want a single piece or a complete home setup, they handle everything with equal care",
+  "They helped me choose designs that would suit my home's existing decor, very thoughtful service"
+];
+
+var DELIVERY_SERVICE = [
+  "Items were delivered on time without any damage, the packaging and handling were excellent",
+  "Delivery was prompt and the team who brought the furniture was professional and careful",
+  "No transit damage whatsoever, every piece arrived in perfect condition",
+  "They set up all the furniture in the correct rooms and cleaned up completely after installation",
+  "After-sales service here is something other shops should seriously learn from",
+  "When a minor issue came up months after delivery, they resolved it without any fuss",
+  "The delivery team was polite, efficient, and handled every piece with great care",
+  "They confirmed the delivery date in advance and arrived exactly on time",
+  "No hidden charges appeared after the purchase, the price quoted was the price paid",
+  "Their after-sales relationship is genuinely one of the best I have experienced with any shop",
+  "All items arrived assembled or were assembled quickly and correctly by their team",
+  "The logistics they handle in-house ensure there are no middlemen damaging your furniture in transit",
+  "Every delivery I have received from International Furnishers over the years has been damage-free",
+  "They coordinate delivery to suit your schedule which is very considerate and professional",
+  "The team that handles delivery clearly takes as much pride in the job as those who build the furniture",
+  "Post-purchase support was genuinely excellent, they followed up to ensure everything was satisfactory",
+  "The warranty on their products is honored without any arguments or excuses, a rare quality",
+  "From purchase to delivery to post-delivery support, the experience is consistently excellent"
+];
+
+var OWNER_STAFF = [
+  "The owner is an exceptionally soft-spoken and genuinely helpful person",
+  "The owner's politeness and warmth make the entire buying experience a pleasure",
+  "The owner never pressures you into any purchase and gives honest, considered advice",
+  "The staff is knowledgeable, courteous, and patient with every question you might have",
+  "The owner took personal interest in understanding exactly what we needed before showing options",
+  "The owner is one of the most well-mannered and customer-focused people I have met in retail",
+  "Dealing with the owner at International Furnishers is refreshing in a market full of pushy salespeople",
+  "The staff here treats every customer with genuine respect and patience throughout the selection process",
+  "The owner's honest guidance helped us avoid an expensive mistake and choose exactly the right piece",
+  "The team understands furniture deeply and their recommendations are always in the customer's best interest",
+  "The owner remembers his long-term customers and always ensures they get the best attention and value",
+  "There is no hard selling here, the quality of the products does all the convincing on its own",
+  "The patience of the staff while we took hours to finalize our choices was genuinely impressive",
+  "The owner personally oversees quality before any piece leaves the workshop, which shows in every product",
+  "Their customer-centric approach is deeply embedded in how this shop operates at every level",
+  "The warmth and honesty of the owner creates a buying environment that feels genuinely trustworthy",
+  "Staff was available to answer every question and never once made us feel we were being a burden",
+  "The owner's decades of experience in furniture means his advice is always practical and reliable"
+];
+
+var VALUE_TRUST = [
+  "Completely worth every rupee, the pricing is fair and the quality justifies every paisa spent",
+  "Best deals with a latest collection at very reasonable prices is exactly what you find here",
+  "The value for money at International Furnishers is unmatched compared to any competitor I know of",
+  "Pricing is transparent, fair, and consistent, no negotiation drama or hidden add-ons",
+  "What you pay here gets you furniture that lasts twenty years, that is genuine value",
+  "Quality this high at these prices would be hard to find in any city, let alone Varanasi",
+  "The price I paid for my bedroom set was better than anything I found online for comparable quality",
+  "There is complete transparency in their pricing, nothing is concealed and every charge is explained",
+  "The longevity of their products makes them extraordinarily good value even at full price",
+  "Every rupee spent at International Furnishers is an investment that pays off for years",
+  "No bad faith in any transaction, what is promised is delivered and what is charged is fair",
+  "They do not inflate prices for first-time buyers, the pricing is consistent and honest always",
+  "The furniture I bought five years ago still looks new, that kind of durability is true value for money",
+  "Their reputation since 2001 is built entirely on honest pricing and genuine product quality",
+  "Fair marketing and true products are rare in the furniture market, International Furnishers delivers both"
+];
+
+var CLOSING_RECS = [
+  "Highly recommend International Furnishers to anyone looking for quality furniture in Varanasi.",
+  "If you are furnishing your home in Varanasi, International Furnishers should be your first and only stop.",
+  "The best furniture showroom in Varanasi without any doubt. Go once and you will never look elsewhere.",
+  "Cannot recommend International Furnishers highly enough. Quality, service, and value all in one place.",
+  "Everyone in Varanasi who needs furniture should know about International Furnishers. Truly outstanding.",
+  "Five stars is the minimum this shop deserves. The quality and service here are genuinely exceptional.",
+  "Will keep coming back to International Furnishers for every furniture need and will always recommend them.",
+  "Trusted for over twenty years in Varanasi and every bit of that trust is completely well-earned.",
+  "The best investment for your home starts at International Furnishers. Highly and sincerely recommended.",
+  "Do visit once and the quality will speak for itself. International Furnishers is in a class of its own.",
+  "A hidden gem on Jangambari Road that every Varanasi family should know about. Strongly recommended.",
+  "100 percent recommended for anyone who wants real quality, honest pricing, and genuine after-sales care.",
+  "This is what furniture shopping should feel like. International Furnishers sets the standard.",
+  "My family has bought from here for years and we have never been disappointed. Highly recommend.",
+  "Furniture that lasts decades, service that keeps you coming back. International Furnishers delivers both.",
+  "If quality and trust matter to you in a furniture purchase, look no further than International Furnishers.",
+  "Tell your friends, tell your family. International Furnishers is the best furniture decision you can make in Varanasi.",
+  "Every piece I have bought here has outlasted furniture from three other shops. The quality speaks for itself.",
+  "Best deals, best quality, best service. International Furnishers ticks every box without compromise.",
+  "From the first visit to years of after-sales support, International Furnishers never lets you down.",
+  "Give International Furnishers one chance and your home will thank you for it for years to come.",
+  "Cannot imagine buying furniture anywhere else in Varanasi after experiencing International Furnishers.",
+  "The kind of furniture shop that restores your faith in quality retail. Highly and unreservedly recommended.",
+  "My only regret is not finding International Furnishers sooner. Best furniture decision I have ever made.",
+  "An institution in Varanasi's furniture market and every bit deserving of that reputation."
+];
+
+// ─── HINDI ARRAYS ─────────────────────────────────────────────────
+
+var HI_OPENERS = [
+  "International Furnishers mein pehli baar aaya aur experience bahut achha raha",
+  "Kaafi saalon se International Furnishers se hi furniture khareed raha hoon, kabhi disappointing nahi hua",
+  "Dost ne International Furnishers ka naam liya tha, aur yeh suggestion bilkul sahi nikla",
+  "Varanasi mein itna achha furniture showroom milega socha nahi tha, International Furnishers ne surprise kiya",
+  "Naya ghar furnish karna tha aur pehla stop International Furnishers tha, wahi last stop bhi bana",
+  "Kai jagah dekha furniture lekin International Furnishers ki quality alag hi level par hai",
+  "Padosi ne International Furnishers se furniture liya tha, uski quality dekhi toh khud bhi aa gaya",
+  "Custom furniture chahiye tha toh International Furnishers ka naam saamne aaya, bilkul sahi choice rahi",
+  "Jangambari Road par International Furnishers ka showroom dekha, andar gaya aur bahut impress hua",
+  "Parivaar ke liye naya bedroom set chahiye tha, International Furnishers ne perfect solution diya",
+  "Office ke saathi ne suggest kiya International Furnishers, aur woh suggestion sach mein kaam aaya",
+  "Purane furniture se pareshaan ho gaya tha, International Furnishers ne sahi quality ki samajh di",
+  "Kuch saalon se sunte aa rahe the International Furnishers ke baare mein, finally gaye aur regret nahi",
+  "Ghar ki renovation mein International Furnishers pehla aur sabse important stop raha",
+  "Teen baar doston ne recommend kiya International Furnishers, teeno sahi the"
+];
+
+var HI_PRODUCT = [
+  "Furniture ki quality genuinely exceptional hai, solid aur heavy, bilkul waise jaisa hona chahiye",
+  "Asli plywood aur genuine material use hota hai, koi compromise nahi quality mein",
+  "Bed itna solid hai ki saalon baad bhi bilkul waisi hi condition hai",
+  "Sofa set ka frame bahut strong hai aur upholstery premium quality ka hai",
+  "Har piece substantial feel karta hai, koi hollow ya flimsy nahi lagta",
+  "Wood ki quality aur joinery jo yahan hai woh Varanasi ke kisi aur furniture shop mein nahi mili",
+  "Dining table set saalon se ghar mein hai aur aaj bhi bilkul naya dikhta hai",
+  "Mandir unit bahut sundar crafted hai, detail mein bahut dhyan diya gaya hai",
+  "Saare components genuine hain aur hardware ki quality best grade ki hai",
+  "Double bed itna solid hai ki roz use ke baad bhi finish bilkul perfect hai",
+  "Corner table aur side tables ka weight aur finish genuinely top-level craftsmanship dikhata hai",
+  "Wardrobe ke hinges aur shutters saalon baad bhi smoothly kaam karte hain",
+  "Lacquer finish saalon mein chip ya fade nahi hua, yeh quality furniture ki pehchaan hai",
+  "Har joint precisely kiya gaya hai, construction mein koi bhi sloppiness nahi dikhti"
+];
+
+var HI_STAFF = [
+  "Owner bahut soft-spoken aur genuinely helpful hain, dealing mein bahut achha laga",
+  "Owner ki politeness aur warmth poore buying experience ko khushgawar bana deti hai",
+  "Koi pressure nahi dete purchase ke liye, honest aur thoughtful advice milti hai",
+  "Staff bahut knowledgeable aur courteous hai, har sawaal ka jawab patiently milta hai",
+  "Owner ne pehle poori zaroorat samjhi phir options dikhaye, yeh approach bahut achhi lagi",
+  "Owner ki honest guidance ki wajah se humne sahi piece choose kiya aur bilkul fit aaya",
+  "Yahan koi pushy selling nahi hoti, products ki quality khud baat karte hain",
+  "Itna patient staff bahut rare hai furniture market mein, International Furnishers alag hai",
+  "Owner decades ka experience rakhte hain aur unki advice genuinely practical hoti hai",
+  "Customer ke best interest mein sochna is team ki sabse badi khoobiyon mein se ek hai"
+];
+
+var HI_DELIVERY = [
+  "Delivery time par aayi aur koi damage nahi tha, packaging aur handling excellent thi",
+  "Transit mein koi bhi issue nahi hua, har piece perfect condition mein pahuncha",
+  "After-sales service yahan best hai, koi bhi problem aane par turant resolve karte hain",
+  "Delivery ke baad installation bhi professional tarike se ki aur poori safai bhi ki",
+  "Koi hidden charge nahi tha, jo price quote hua wahi final price raha",
+  "Delivery team polite thi aur har piece ko bahut care se handle kiya",
+  "Delivery date pehle confirm ki aur exactly usi din aaye, very professional",
+  "Post-purchase support genuinely excellent hai, follow-up bhi karte hain satisfaction ke liye",
+  "Warranty ka vaada honestly pura kiya jata hai bina kisi argument ke",
+  "Purchase se delivery tak aur delivery ke baad bhi experience consistently excellent raha"
+];
+
+var HI_VALUE = [
+  "Har paisa wasool hai, pricing fair hai aur quality har rupee justify karti hai",
+  "Best deals aur latest collection bahut reasonable price par yahi milti hai Varanasi mein",
+  "Value for money ke mamle mein International Furnishers ka koi competitor nahi",
+  "Pricing transparent hai, koi hidden cost nahi, har charge clearly explain hota hai",
+  "Is quality ka furniture jo price mein yahan milta hai woh kahin aur dhundh nahi sakte",
+  "Saalon tak tika rehne wala furniture khareedna iska matlab hai genuine investment karna",
+  "Paanch saal pehle kharida furniture aaj bhi naya dikhta hai, yeh real value hai",
+  "2001 se chali aa rahi reputation sirf honest pricing aur genuine quality par bani hai",
+  "Jo vaada kiya woh pura kiya, yahi fair marketing hai jo International Furnishers karta hai"
+];
+
+var HI_CLOSE = [
+  "International Furnishers ko zaroor recommend karunga Varanasi mein furniture dhundh rahe sabhi ko.",
+  "Varanasi mein best furniture showroom hai International Furnishers, koi shak nahi.",
+  "5 star se kam nahi dena chahiye, quality aur service dono exceptional hain.",
+  "Ek baar aaiye aur quality khud bol degi kyun yeh Varanasi ki best furniture shop hai.",
+  "Jitna jaldi International Furnishers mila kaash utna pehle milta. Highly recommend.",
+  "Har paisa wasool hai yahan, results lasting hain aur service genuine hai.",
+  "Apne parivaar aur doston ko refer kar chuka hoon, sab bahut khush hain.",
+  "Varanasi mein rehte ho aur furniture chahiye toh International Furnishers se better koi option nahi.",
+  "Is shop ne furniture ke baare mein mera nazariya badal diya, dil se recommend karta hoon.",
+  "Pehli appointment ke baad hi pata chal gaya tha yeh shop alag hai, aur haan bilkul alag hai.",
+  "Quality, service, aur value teeno mein top hai International Furnishers, bina kisi shak ke.",
+  "Trusted since 2001, aur har saal ke saath trust aur bhi badhta gaya hai."
+];
+
+var ONE_LINERS_EN = [
+  "International Furnishers is the best furniture showroom in Varanasi. Real plywood, genuine materials, honest pricing, and timely delivery. Cannot recommend more strongly.",
+  "Been buying from International Furnishers for over ten years and the quality has never once disappointed. The owner is soft-spoken, honest, and deeply customer-focused.",
+  "If you need furniture in Varanasi, International Furnishers is your answer. Wide variety, custom options, solid quality, and after-sales service that actually means something.",
+  "Outstanding quality and genuinely fair pricing. The furniture I bought years ago still looks brand new. International Furnishers sets a standard that no other shop in Varanasi matches.",
+  "The owner at International Furnishers is one of the most polite and knowledgeable people you will meet. And the furniture quality speaks for itself. Highly recommended.",
+  "From sofa sets to temple units to custom-built wardrobes, International Furnishers delivers on every front. Quality, value, and service are all exceptional.",
+  "No transit damage, no hidden charges, no bad faith. Just real quality furniture delivered on time with excellent after-sales support. That is International Furnishers.",
+  "Trusted since 2001 and every year of that reputation is justified. International Furnishers is the best furniture decision you can make in Varanasi.",
+  "Came for a double bed, ended up furnishing three rooms. The quality is that convincing. International Furnishers is genuinely in a class of its own.",
+  "The variety at International Furnishers is unmatched in Varanasi and the ability to customize designs makes it truly special. Excellent experience every single time.",
+  "Real wood, real plywood, real components. No shortcuts, no compromises. International Furnishers is exactly what a premium furniture showroom should be.",
+  "If you want furniture that lasts twenty years and a buying experience that leaves you with zero regrets, International Furnishers on Jangambari Road is the only address you need.",
+  "My family has bought from International Furnishers for years. Every piece is still in perfect condition. The quality here is simply in another league.",
+  "After-sales service at International Furnishers is something that sets them apart from every other furniture shop. They stand behind every product they sell.",
+  "Worth every rupee and then some. International Furnishers offers quality that justifies the price many times over and a buying experience that is genuinely a pleasure."
+];
+
+var ONE_LINERS_HI = [
+  "International Furnishers Varanasi ki best furniture shop hai. Real plywood, genuine material, fair price, aur time par delivery. Koi comparison nahi.",
+  "10 saalon se International Furnishers se furniture khareed raha hoon, kabhi disappointing nahi hua. Owner bahut honest aur helpful hain.",
+  "Varanasi mein furniture chahiye toh seedha International Furnishers jao. Variety, custom options, solid quality sab ek jagah milta hai.",
+  "Jo furniture saalon pehle liya tha aaj bhi bilkul naya dikhta hai. International Furnishers ki quality genuinely alag level par hai.",
+  "Owner ki politeness aur staff ki care ne buying experience ko bahut achha banaya. Aur furniture ki quality toh baat hi alag hai.",
+  "Sofa set se lekar mandir unit tak, custom wardrobe se lekar dining table tak, International Furnishers sab kuch deliver karta hai quality ke saath.",
+  "Koi transit damage nahi, koi hidden charge nahi, koi bad faith nahi. Sirf genuine quality aur excellent service. Yahi hai International Furnishers.",
+  "2001 se trusted aur har saal yeh reputation aur strengthen hoti hai. Varanasi mein best furniture decision International Furnishers jaana hai.",
+  "Ek double bed ke liye aaya tha aur teen kamre furnish karke gaya. Quality itni convincing hai. International Furnishers is class apart.",
+  "Real wood, real plywood, real components. Koi shortcut nahi, koi compromise nahi. International Furnishers exactly waisa hi hai jaisa ek premium showroom hona chahiye."
+];
+
+var TWO_PART_A = [
+  "International Furnishers on Jangambari Road is without doubt the most trustworthy furniture showroom in Varanasi.",
+  "Have been a customer of International Furnishers for years and the experience has been consistently excellent.",
+  "My furniture journey in Varanasi truly began when I first visited International Furnishers.",
+  "The owner at International Furnishers is one of the most knowledgeable and genuinely helpful furniture experts I have met.",
+  "Visited several furniture shops in Varanasi before finding International Furnishers and the difference was immediately clear.",
+  "A friend's recommendation led me to International Furnishers and it completely transformed how I think about furniture.",
+  "Cannot imagine buying furniture anywhere else in Varanasi after discovering International Furnishers.",
+  "First visited International Furnishers for a single item and ended up returning multiple times to furnish the whole home.",
+  "The furniture market in Varanasi has many options but International Furnishers is genuinely in a different league entirely.",
+  "Have recommended International Furnishers to everyone who has ever asked me where my furniture comes from.",
+  "Came to International Furnishers for a custom sofa and the result was so perfect I came back for the entire living room.",
+  "As someone very particular about quality, finding a shop I could completely trust was difficult until International Furnishers.",
+  "The reputation of International Furnishers for genuine quality is known across Varanasi and completely well-deserved.",
+  "Started buying from International Furnishers for one room and gradually they furnished my entire house.",
+  "The craftsmanship at International Furnishers reminded me of what good furniture should actually feel and look like.",
+  "From the moment I walked in, the showroom at International Furnishers communicated a very different standard of quality.",
+  "After years of buying furniture that did not last, International Furnishers gave me pieces that have stood the test of time.",
+  "My sister's glowing recommendation of International Furnishers turned out to be one of the most accurate things she has ever told me.",
+  "Never thought a furniture shop in Varanasi would have this level of quality until I visited International Furnishers.",
+  "The first consultation at International Furnishers was more thorough and honest than anything I had experienced before."
+];
+
+var TWO_PART_B = [
+  "Every piece is built to last and the quality of materials used is genuinely top-tier throughout.",
+  "The combination of honest pricing, genuine materials, and excellent after-sales service is unbeatable.",
+  "The owner's guidance and the team's expertise make every purchase decision a confident one.",
+  "From delivery to installation to post-purchase support, everything is handled with complete professionalism.",
+  "The custom work they do is precisely executed and always exceeds what you imagined it would look like.",
+  "Quality has been consistent from the very first purchase to every single one that followed.",
+  "Would not trade this shop for anything. Complete trust, genuine products, and real satisfaction every time.",
+  "The staff is knowledgeable, patient, and genuinely invested in helping you find exactly what you need.",
+  "Both the product quality and the overall buying experience here are truly exceptional in every way.",
+  "The entire journey from selection to delivery to after-sales care is smooth, professional, and reassuring.",
+  "This is what a furniture showroom should look like. Honest, quality-driven, and customer-first always.",
+  "No fake promises, no unnecessary pressure, no hidden charges. Just genuine furniture and honest service.",
+  "Decades of experience and a commitment to quality come together perfectly at International Furnishers.",
+  "Highly recommend to every person in Varanasi who is serious about the quality of their home furnishings.",
+  "Will keep returning to International Furnishers for every furniture need. That is my honest and final verdict.",
+  "The results speak louder than any words. Furniture that still looks new years later. Truly outstanding.",
+  "This level of craftsmanship was something I associated only with larger cities until I found this shop.",
+  "Their commitment to genuine materials over quick profits makes all the difference in the final product.",
+  "Everything from the showroom experience to the last piece delivered reflects the highest standard of care.",
+  "My home has never looked better and International Furnishers deserves full credit for that transformation."
+];
+
+// ─── TYPO/ERROR VARIANTS ──────────────────────────────────────────
+
+var ERR_OPENERS = [
+  "Visited International Furnishers on Jangambari Road for the first time and was very impresed",
+  "Have been comming to International Furnishers for 10 years now, quality never disapoints",
+  "Heard about Internatonal Furnishers from a nighbor and the experiance was amazing",
+  "Finaly visited International Furnishers after passing by so many times, completly worth it",
+  "Was looking for qualety furniture in Varanasi and somone pointed me to International Furnishers",
+  "My freind told me about International Furnishers and I am so gratefull she did",
+  "Came to International Furnishers for a custome furniture requirment and was fully satisfied",
+  "Walked into International Furnishers on Jangambari Road and came out completly impresed",
+  "Have been comeing to International Furnishers for every furniture need for many years",
+  "Oficce collegue recomended International Furnishers and it turned out to be the best advise",
+  "Was renovting my home and International Furnishers was the first palce I visited"
+];
+
+var ERR_CLOSE = [
+  "Higly recommend International Furnishers to anyone looking for qualety furniture in Varanasi.",
+  "If your furnishing your home in Varanasi, International Furnishers should be your first stop.",
+  "The best furniture showroom in Varanasi without any dout. Go once and you will never look elsewere.",
+  "Cannot recomend International Furnishers higly enough. Quality, service, and value all in one palce.",
+  "Five stars is the minimum this shop desrves. The qualety and service here are genuinely exeptional.",
+  "Will keep comeing back to International Furnishers for every furniture need, always reccomend them.",
+  "100 persent recomended for anyone who wants real quality, honest pricing and genuine after-sales care.",
+  "This is what furniture shoping should feel like. International Furnishers sets the standerd.",
+  "Furniture that lasts decads, service that keeps you comeing back. International Furnishers delivers both.",
+  "Give International Furnishers one chance and your home will thank you for it for yeras to come."
+];
+
+// ─── RNG & BUFFER ─────────────────────────────────────────────────
+
+var _s = Date.now();
+function rnd(){ _s=(_s*1664525+1013904223)&0xffffffff; return((_s>>>0)/4294967295); }
+function pick(a){ return a[Math.floor(rnd()*a.length)]; }
+
+var buf = [];
+var BUF_MAX = 18;
+function addBuf(t){ buf.push(t); if(buf.length>BUF_MAX) buf.shift(); }
+function inBuf(t){
+  return buf.some(function(b){
+    var wa=new Set(b.toLowerCase().split(/\s+/).slice(0,12));
+    var wb=new Set(t.toLowerCase().split(/\s+/).slice(0,12));
+    var c=0; wa.forEach(function(w){ if(wb.has(w)) c++; });
+    return c/Math.max(wa.size,wb.size,1)>0.45;
+  });
+}
+
+var reviewCount = 0;
+function useErrors(){ reviewCount++; return (reviewCount % 3 === 0); }
+
+function compose(){
+  var errs = useErrors();
+  var style = Math.floor(rnd()*14);
+
+  if(style===0){
+    var op = errs ? pick(ERR_OPENERS) : pick(VISIT_OPENERS);
+    var pr = pick(PRODUCT_QUALITY);
+    var de = pick(DELIVERY_SERVICE);
+    var cl = errs ? pick(ERR_CLOSE) : pick(CLOSING_RECS);
+    return op+". "+pr+". "+de+". "+cl;
+  }
+  if(style===1){
+    var op = errs ? pick(ERR_OPENERS) : pick(VISIT_OPENERS);
+    var st = pick(OWNER_STAFF);
+    var va = pick(VALUE_TRUST);
+    var cl = errs ? pick(ERR_CLOSE) : pick(CLOSING_RECS);
+    return op+". "+st+". "+va+". "+cl;
+  }
+  if(style===2){
+    var op = errs ? pick(ERR_OPENERS) : pick(VISIT_OPENERS);
+    var cv = pick(CUSTOM_VARIETY);
+    var pr = pick(PRODUCT_QUALITY);
+    var cl = errs ? pick(ERR_CLOSE) : pick(CLOSING_RECS);
+    return op+". "+cv+". "+pr+". "+cl;
+  }
+  if(style===3){
+    var op = errs ? pick(ERR_OPENERS) : pick(VISIT_OPENERS);
+    var de = pick(DELIVERY_SERVICE);
+    var va = pick(VALUE_TRUST);
+    var cl = errs ? pick(ERR_CLOSE) : pick(CLOSING_RECS);
+    return op+". "+de+". "+va+". "+cl;
+  }
+  if(style===4){
+    var op = errs ? pick(ERR_OPENERS) : pick(VISIT_OPENERS);
+    var st = pick(OWNER_STAFF);
+    var pr = pick(PRODUCT_QUALITY);
+    var cl = errs ? pick(ERR_CLOSE) : pick(CLOSING_RECS);
+    return op+". "+st+". "+pr+". "+cl;
+  }
+  if(style===5){
+    var op = errs ? pick(ERR_OPENERS) : pick(VISIT_OPENERS);
+    var cv = pick(CUSTOM_VARIETY);
+    var de = pick(DELIVERY_SERVICE);
+    var cl = errs ? pick(ERR_CLOSE) : pick(CLOSING_RECS);
+    return op+". "+cv+". "+de+". "+cl;
+  }
+  if(style===6){ return pick(ONE_LINERS_EN); }
+  if(style===7){ return pick(ONE_LINERS_HI); }
+  if(style===8){ return pick(TWO_PART_A)+" "+pick(TWO_PART_B); }
+  if(style===9){
+    var op = pick(HI_OPENERS);
+    var pr = pick(HI_PRODUCT);
+    var de = pick(HI_DELIVERY);
+    var cl = pick(HI_CLOSE);
+    return op+". "+pr+". "+de+". "+cl;
+  }
+  if(style===10){
+    var op = pick(HI_OPENERS);
+    var st = pick(HI_STAFF);
+    var va = pick(HI_VALUE);
+    var cl = pick(HI_CLOSE);
+    return op+". "+st+". "+va+". "+cl;
+  }
+  if(style===11){
+    var op = pick(HI_OPENERS);
+    var pr = pick(HI_PRODUCT);
+    var st = pick(HI_STAFF);
+    var cl = pick(HI_CLOSE);
+    return op+". "+pr+". "+st+". "+cl;
+  }
+  if(style===12){
+    var lines = [
+      "Best furniture showroom in Varanasi. "+pick(PRODUCT_QUALITY)+". "+pick(CLOSING_RECS),
+      "International Furnishers is in a league of its own for furniture in Varanasi. "+pick(VALUE_TRUST)+". "+pick(CLOSING_RECS),
+      pick(VISIT_OPENERS)+". "+pick(VALUE_TRUST)+". "+pick(CLOSING_RECS),
+      pick(OWNER_STAFF)+". "+pick(PRODUCT_QUALITY)+". "+pick(CLOSING_RECS),
+      pick(CUSTOM_VARIETY)+". "+pick(DELIVERY_SERVICE)+". "+pick(CLOSING_RECS),
+      "Genuine materials, expert craftsmanship, and a team that truly cares. "+pick(CLOSING_RECS),
+      pick(PRODUCT_QUALITY)+". "+pick(DELIVERY_SERVICE)+". "+pick(CLOSING_RECS),
+      pick(OWNER_STAFF)+". "+pick(VALUE_TRUST)+". "+pick(CLOSING_RECS)
+    ];
+    return pick(lines);
+  }
+  var va = pick(VALUE_TRUST);
+  var st = pick(OWNER_STAFF);
+  var pr = errs ? pick(HI_PRODUCT) : pick(PRODUCT_QUALITY);
+  var cl = errs ? pick(ERR_CLOSE) : pick(CLOSING_RECS);
+  return va+". "+st+". "+pr+". "+cl;
+}
+
+function buildReview(){
+  _s = Date.now() ^ (Math.random()*0x7fffffff|0);
+  var v, n=0;
+  do { v=compose(); n++; } while(inBuf(v) && n<30);
+  addBuf(v);
+  return v;
+}
+
+var currentReview = "";
+
+function displayReview(anim){
+  var el = document.getElementById("reviewText");
+  if(anim){
+    el.classList.add("fade");
+    setTimeout(function(){
+      currentReview = buildReview();
+      el.textContent = currentReview;
+      el.classList.remove("fade");
+    },180);
+  } else {
+    currentReview = buildReview();
+    el.textContent = currentReview;
+  }
+}
+
+function refreshReview(){
+  var btn = document.getElementById("btnRefresh");
+  btn.classList.add("spinning");
+  displayReview(true);
+  setTimeout(function(){ btn.classList.remove("spinning"); },440);
+  var cb = document.getElementById("btnCopy");
+  cb.textContent = "Copy & Post on Google";
+  cb.classList.remove("success");
+  document.getElementById("hint").textContent = "Tap to copy your review, then paste it on Google.";
+}
+
+function copyAndGo(){
+  var btn = document.getElementById("btnCopy");
+  function afterCopy(){
+    btn.textContent = "Copied! Opening Google… ✓";
+    btn.classList.add("success");
+    document.getElementById("hint").textContent = "Paste it in the review box on Google. 🪵";
+    setTimeout(function(){ window.open(reviewLink,"_blank"); },900);
+  }
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(currentReview).then(afterCopy).catch(fallback);
+  } else { fallback(); }
+  function fallback(){
+    var ta=document.createElement("textarea");
+    ta.value=currentReview;
+    ta.setAttribute("readonly","");
+    ta.style.cssText="position:fixed;top:0;left:0;opacity:0;pointer-events:none;";
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    try{ document.execCommand("copy"); }catch(e){}
+    document.body.removeChild(ta);
+    afterCopy();
+  }
+}
+
+window.addEventListener("DOMContentLoaded",function(){ displayReview(false); });
+</script>
+</body>
+</html>
