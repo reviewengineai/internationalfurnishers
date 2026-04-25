@@ -6,335 +6,472 @@
 <title>International Furnishers — Leave a Review</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --walnut:       #3d2314;
-    --mahogany:     #6b3a2a;
-    --amber:        #c17f3c;
-    --gold:         #d4a852;
-    --gold-light:   #e8c87a;
-    --cream:        #f4ebe0;
-    --cream-deep:   #e8d8c4;
-    --ivory:        #fdf8f0;
-    --warm-white:   #fffdf8;
-    --text-dark:    #1e1208;
-    --text-mid:     #5c3a28;
-    --text-soft:    #9a7a60;
-  }
+:root {
+  --bg:           #07040200;
+  --walnut:       #3d2314;
+  --mahogany:     #6b3a2a;
+  --amber:        #c17f3c;
+  --gold:         #d4a852;
+  --gold-bright:  #f0cf7a;
+  --gold-dim:     rgba(212,168,82,0.35);
+  --cream-deep:   #d9c8ae;
+  --card-bg:      #fdfaf4;
+  --text-dark:    #18100600;
+  --text-mid:     #5c3a28;
+  --text-soft:    #8a6a50;
+}
 
-  html, body {
-    min-height: 100%;
-    background: #1a0d06;
-    font-family: 'Raleway', sans-serif;
-    color: var(--text-dark);
-    -webkit-font-smoothing: antialiased;
-  }
+html, body {
+  min-height: 100%;
+  background: #080402;
+  font-family: 'Jost', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
 
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background:
-      radial-gradient(ellipse 65% 45% at 5% 0%, rgba(193,127,60,0.22) 0%, transparent 55%),
-      radial-gradient(ellipse 55% 55% at 95% 100%, rgba(212,168,82,0.12) 0%, transparent 55%),
-      radial-gradient(ellipse 80% 40% at 50% 60%, rgba(61,35,20,0.5) 0%, transparent 65%);
-    pointer-events: none;
-    z-index: 0;
-  }
+/* ── Deep layered background ── */
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 5%,  rgba(193,127,60,0.18) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 85% 90%,  rgba(61,35,20,0.55)  0%, transparent 50%),
+    radial-gradient(ellipse 90% 70% at 50% 50%,  rgba(20,10,4,0.8)    0%, transparent 70%),
+    radial-gradient(ellipse 40% 60% at 70% 20%,  rgba(212,168,82,0.06) 0%, transparent 45%);
+  pointer-events: none;
+}
 
-  /* Wood grain texture overlay */
-  body::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9 0.05' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.022'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0.6;
-  }
+/* ── Ambient canvas particles ── */
+#particles {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
 
-  .page {
-    position: relative;
-    z-index: 1;
-    min-height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 44px 20px 60px;
-    gap: 0;
-  }
+/* ── Page layout ── */
+.page {
+  position: relative;
+  z-index: 2;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(32px, 6vw, 56px) clamp(16px, 5vw, 24px) clamp(44px, 8vw, 64px);
+}
 
-  /* Brand header */
-  .brand-block {
-    text-align: center;
-    margin-bottom: 26px;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.1s forwards;
-  }
+/* ── Logo block ── */
+.logo-block {
+  opacity: 0;
+  animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.15s forwards;
+  margin-bottom: clamp(22px, 4vw, 30px);
+  position: relative;
+}
 
-  .brand-logo {
-    max-width: 300px;
-    width: 100%;
-    height: auto;
-    margin-bottom: 4px;
-  }
+.logo-glow {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse 60% 40% at 50% 60%, rgba(212,168,82,0.18) 0%, transparent 70%);
+  animation: glowPulse 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
 
-  .brand-name {
-    display: none; /* Logo image already includes the full name */
-  }
-  .brand-tagline {
-    display: none; /* Logo image already includes the tagline */
-  }
+.brand-logo {
+  display: block;
+  width: min(300px, 76vw);
+  height: auto;
+  position: relative;
+  z-index: 1;
+  animation: logoGlow 3.5s ease-in-out infinite;
+}
 
-  .stars-wrap {
-    text-align: center;
-    margin-bottom: 22px;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.3s forwards;
-  }
-  .stars {
-    font-size: 20px;
-    letter-spacing: 7px;
-    color: var(--gold);
-    filter: drop-shadow(0 1px 4px rgba(212,168,82,0.5));
-  }
-  .stars-label {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(212,168,82,0.65);
-    margin-top: 6px;
-  }
+/* ── Stars ── */
+.stars-block {
+  opacity: 0;
+  animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.32s forwards;
+  text-align: center;
+  margin-bottom: clamp(18px, 3.5vw, 26px);
+}
 
-  .card {
-    width: 100%;
-    max-width: 450px;
-    background: rgba(253,248,240,0.97);
-    border: 1px solid rgba(193,127,60,0.35);
-    border-radius: 6px;
-    padding: 28px 26px 24px;
-    box-shadow:
-      0 2px 0px rgba(61,35,20,0.12),
-      0 12px 50px rgba(0,0,0,0.45),
-      inset 0 1px 0 rgba(255,255,255,0.95);
-    position: relative;
-    overflow: hidden;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.45s forwards;
-  }
+.stars {
+  display: inline-flex;
+  gap: 6px;
+  margin-bottom: 7px;
+}
 
-  /* Top border – wood grain stripe */
-  .card::after {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: linear-gradient(90deg,
-      var(--walnut) 0%,
-      var(--mahogany) 20%,
-      var(--amber) 45%,
-      var(--gold) 55%,
-      var(--mahogany) 80%,
-      var(--walnut) 100%
-    );
-    border-radius: 6px 6px 0 0;
-  }
+.star {
+  font-size: clamp(18px, 4.5vw, 22px);
+  color: var(--gold);
+  display: inline-block;
+  animation: starPulse 2.8s ease-in-out infinite;
+  filter: drop-shadow(0 0 5px rgba(212,168,82,0.6));
+}
+.star:nth-child(2) { animation-delay: 0.15s; }
+.star:nth-child(3) { animation-delay: 0.30s; }
+.star:nth-child(4) { animation-delay: 0.45s; }
+.star:nth-child(5) { animation-delay: 0.60s; }
 
-  /* Corner ornament */
-  .card-corner {
-    position: absolute;
-    top: 14px;
-    right: 18px;
-    font-size: 15px;
-    color: var(--cream-deep);
-    line-height: 1;
-    user-select: none;
-  }
+.stars-label {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: rgba(212,168,82,0.55);
+}
 
-  .card-label {
-    font-size: 9px;
-    font-weight: 700;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--text-soft);
-    margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .card-label::before,
-  .card-label::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cream-deep));
-  }
-  .card-label::after {
-    background: linear-gradient(90deg, var(--cream-deep), transparent);
-  }
+/* ── Card wrapper (animated gradient border) ── */
+.card-wrap {
+  width: 100%;
+  max-width: 460px;
+  padding: 1.5px;
+  border-radius: 16px;
+  background: linear-gradient(90deg,
+    #2a1509, #7a4820, #d4a852, #f0cf7a, #d4a852, #7a4820, #2a1509
+  );
+  background-size: 250% 100%;
+  animation: borderFlow 5s linear infinite, fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.48s both;
+  box-shadow:
+    0 0 0 1px rgba(212,168,82,0.08),
+    0 8px 30px rgba(0,0,0,0.5),
+    0 24px 70px rgba(0,0,0,0.5),
+    0 0 80px rgba(212,168,82,0.06);
+  opacity: 0;
+}
 
-  .review-text {
-    font-family: 'Raleway', sans-serif;
-    font-size: 14.5px;
-    font-weight: 400;
-    line-height: 1.82;
-    color: var(--text-dark);
-    min-height: 84px;
-    word-break: break-word;
-    transition: opacity 0.18s ease;
-  }
-  .review-text.fade { opacity: 0; }
+.card {
+  background: var(--card-bg);
+  border-radius: 14.5px;
+  padding: clamp(22px, 5vw, 30px) clamp(20px, 5vw, 28px) clamp(18px, 4vw, 24px);
+  position: relative;
+  overflow: hidden;
+}
 
-  .divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--cream-deep), transparent);
-    margin: 20px 0;
-  }
+/* Card inner top shimmer line */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.9) 50%, transparent 100%);
+  opacity: 0.8;
+}
 
-  .btn-row { display: flex; gap: 10px; }
+/* Card label */
+.card-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+.card-label-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(193,127,60,0.35));
+}
+.card-label-line.r { background: linear-gradient(90deg, rgba(193,127,60,0.35), transparent); }
+.card-label-text {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #9a7a60;
+  white-space: nowrap;
+}
 
-  .btn-cta {
-    flex: 1;
-    padding: 15px 18px;
-    background: linear-gradient(135deg, var(--mahogany) 0%, var(--walnut) 100%);
-    color: #fff;
-    font-family: 'Raleway', sans-serif;
-    font-size: 13.5px;
-    font-weight: 700;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.22s ease;
-    box-shadow: 0 4px 18px rgba(61,35,20,0.32);
-    position: relative;
-    overflow: hidden;
-  }
-  .btn-cta::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
-    border-radius: 4px;
-  }
-  .btn-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(61,35,20,0.38); }
-  .btn-cta:active { transform: scale(0.97); }
-  .btn-cta.success {
-    background: linear-gradient(135deg, #4a7a52 0%, #2e5234 100%);
-    box-shadow: 0 4px 18px rgba(46,82,52,0.35);
-  }
+/* Review text */
+.review-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(15.5px, 3.8vw, 17px);
+  font-weight: 400;
+  line-height: 1.85;
+  color: #1e1208;
+  min-height: 90px;
+  word-break: break-word;
+  transition: opacity 0.2s ease;
+  letter-spacing: 0.01em;
+}
+.review-text.fade { opacity: 0; }
 
-  .btn-refresh {
-    flex: 0 0 52px;
-    padding: 15px;
-    background: var(--cream);
-    color: var(--mahogany);
-    border: 1px solid var(--cream-deep);
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.22s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .btn-refresh:hover { background: var(--cream-deep); color: var(--walnut); }
-  .btn-refresh:active { transform: scale(0.97); }
-  .btn-refresh svg { transition: transform 0.44s cubic-bezier(.4,2,.55,.9); }
-  .btn-refresh.spinning svg { transform: rotate(360deg); }
+/* Ornamental divider */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: clamp(16px, 3.5vw, 22px) 0;
+}
+.div-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(193,127,60,0.3));
+}
+.div-line.r { background: linear-gradient(90deg, rgba(193,127,60,0.3), transparent); }
+.div-gem {
+  color: rgba(193,127,60,0.4);
+  font-size: 9px;
+  line-height: 1;
+}
 
-  /* Address strip */
-  .address-strip {
-    margin-top: 20px;
-    width: 100%;
-    max-width: 450px;
-    text-align: center;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.6s forwards;
-  }
-  .address-text {
-    font-size: 11px;
-    color: rgba(212,168,82,0.55);
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    line-height: 1.6;
-  }
-  .since-badge {
-    display: inline-block;
-    margin-top: 8px;
-    padding: 4px 12px;
-    border: 1px solid rgba(212,168,82,0.3);
-    border-radius: 2px;
-    font-size: 9.5px;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--amber);
-    background: rgba(193,127,60,0.08);
-  }
+/* Button row */
+.btn-row {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+}
 
-  .hint {
-    text-align: center;
-    font-size: 11.5px;
-    color: rgba(212,168,82,0.5);
-    margin-top: 14px;
-    font-weight: 400;
-    letter-spacing: 0.03em;
-    min-height: 18px;
-    opacity: 0;
-    animation: fadeUp 0.8s ease 0.65s forwards;
-  }
+/* CTA button */
+.btn-cta {
+  flex: 1;
+  min-height: 52px;
+  padding: 0 18px;
+  background: linear-gradient(135deg, #b87230 0%, #d4a852 40%, #e8c060 60%, #c58a38 100%);
+  background-size: 200% 200%;
+  color: #1a0e04;
+  font-family: 'Jost', sans-serif;
+  font-size: clamp(12px, 3vw, 13.5px);
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background-position 0.4s ease;
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.25) inset,
+    0 -2px 0 rgba(0,0,0,0.25) inset,
+    0 4px 16px rgba(193,127,60,0.4),
+    0 8px 32px rgba(193,127,60,0.2);
+}
 
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
+/* CTA shimmer sweep */
+.btn-cta::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 70%;
+  height: 100%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.28) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  pointer-events: none;
+}
+
+.btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.25) inset,
+    0 -2px 0 rgba(0,0,0,0.25) inset,
+    0 6px 24px rgba(193,127,60,0.55),
+    0 12px 40px rgba(193,127,60,0.25);
+  background-position: 100% 0;
+}
+.btn-cta:hover::after {
+  animation: shimmerSweep 0.65s ease forwards;
+}
+.btn-cta:active {
+  transform: scale(0.97) translateY(0);
+}
+
+.btn-cta.success {
+  background: linear-gradient(135deg, #3d6b45 0%, #5a9464 100%);
+  box-shadow:
+    0 2px 0 rgba(255,255,255,0.15) inset,
+    0 4px 16px rgba(61,107,69,0.4);
+  color: #fff;
+}
+
+/* Refresh button */
+.btn-refresh {
+  flex: 0 0 52px;
+  height: 52px;
+  background: rgba(255,252,244,0.08);
+  color: rgba(212,168,82,0.75);
+  border: 1px solid rgba(212,168,82,0.22);
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s ease;
+  backdrop-filter: blur(4px);
+}
+.btn-refresh:hover {
+  background: rgba(212,168,82,0.12);
+  border-color: rgba(212,168,82,0.45);
+  color: var(--gold-bright);
+  transform: translateY(-1px);
+}
+.btn-refresh:active { transform: scale(0.95); }
+.btn-refresh svg { transition: transform 0.48s cubic-bezier(.4,2,.55,.9); }
+.btn-refresh.spinning svg { transform: rotate(360deg); }
+
+/* ── Bottom strip ── */
+.bottom-strip {
+  opacity: 0;
+  animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) 0.65s forwards;
+  text-align: center;
+  margin-top: clamp(16px, 3.5vw, 22px);
+}
+
+.address-text {
+  font-size: 11px;
+  color: rgba(212,168,82,0.38);
+  letter-spacing: 0.04em;
+  line-height: 1.7;
+  font-weight: 400;
+}
+
+.badge-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border: 1px solid rgba(212,168,82,0.22);
+  border-radius: 3px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(212,168,82,0.55);
+}
+.badge-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: var(--gold);
+  animation: dotPulse 2s ease-in-out infinite;
+}
+
+.hint-text {
+  margin-top: 12px;
+  font-size: 11px;
+  color: rgba(212,168,82,0.35);
+  letter-spacing: 0.03em;
+  min-height: 16px;
+  transition: color 0.3s ease;
+}
+
+/* ── Keyframes ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50%       { opacity: 1;   transform: scale(1.08); }
+}
+
+@keyframes logoGlow {
+  0%, 100% { filter: drop-shadow(0 0 18px rgba(212,168,82,0.22)) drop-shadow(0 2px 12px rgba(0,0,0,0.5)); }
+  50%       { filter: drop-shadow(0 0 34px rgba(212,168,82,0.45)) drop-shadow(0 2px 12px rgba(0,0,0,0.5)); }
+}
+
+@keyframes starPulse {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 4px rgba(212,168,82,0.45)); }
+  50%       { transform: scale(1.1); filter: drop-shadow(0 0 10px rgba(212,168,82,0.9)); }
+}
+
+@keyframes borderFlow {
+  0%   { background-position: 0%   0; }
+  100% { background-position: 250% 0; }
+}
+
+@keyframes shimmerSweep {
+  0%   { left: -120%; }
+  100% { left: 160%;  }
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.4; transform: scale(0.7); }
+}
 </style>
 </head>
 <body>
 
+<div class="bg-layer"></div>
+<canvas id="particles"></canvas>
+
 <div class="page">
 
-  <div class="brand-block">
+  <!-- Logo -->
+  <div class="logo-block">
+    <div class="logo-glow"></div>
     <img src="image-removebg-preview.png" alt="International Furnishers" class="brand-logo">
-    <div class="brand-name">International Furnishers</div>
-    <div class="brand-tagline">Premium Collection · Varanasi</div>
   </div>
 
-  <div class="stars-wrap">
-    <div class="stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+  <!-- Stars -->
+  <div class="stars-block">
+    <div class="stars">
+      <span class="star">★</span>
+      <span class="star">★</span>
+      <span class="star">★</span>
+      <span class="star">★</span>
+      <span class="star">★</span>
+    </div>
     <div class="stars-label">Share your experience</div>
   </div>
 
-  <div class="card">
-    <div class="card-corner">❖</div>
-    <div class="card-label">Your Review</div>
-    <div class="review-text" id="reviewText">Loading your review…</div>
-    <div class="divider"></div>
-    <div class="btn-row">
-      <button class="btn-cta" id="btnCopy" onclick="copyAndGo()">Copy &amp; Post on Google</button>
-      <button class="btn-refresh" id="btnRefresh" onclick="refreshReview()" title="Generate new review">
-        <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-             stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="23 4 23 10 17 10"></polyline>
-          <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
-        </svg>
-      </button>
+  <!-- Card -->
+  <div class="card-wrap">
+    <div class="card">
+      <div class="card-label">
+        <div class="card-label-line"></div>
+        <span class="card-label-text">Your Review</span>
+        <div class="card-label-line r"></div>
+      </div>
+
+      <div class="review-text" id="reviewText">Loading your review…</div>
+
+      <div class="divider">
+        <div class="div-line"></div>
+        <span class="div-gem">❖</span>
+        <div class="div-line r"></div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-cta" id="btnCopy" onclick="copyAndGo()">Copy &amp; Post on Google</button>
+        <button class="btn-refresh" id="btnRefresh" onclick="refreshReview()" title="New review">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+          </svg>
+        </button>
+      </div>
     </div>
   </div>
 
-  <div class="address-strip">
-    <div class="address-text">D-35/76, Jangambari Road, near UCO Bank, Varanasi 221001</div>
-    <div class="since-badge">Trusted Since 2001</div>
+  <!-- Bottom -->
+  <div class="bottom-strip">
+    <div class="address-text">D-35/76, Jangambari Road · near UCO Bank · Varanasi 221001</div>
+    <div class="badge-row">
+      <div class="badge"><span class="badge-dot"></span>Trusted Since 2001</div>
+    </div>
+    <div class="hint-text" id="hint">Tap to copy your review, then paste it on Google.</div>
   </div>
-
-  <p class="hint" id="hint">Tap to copy your review, then paste it on Google.</p>
 
 </div>
 
@@ -871,6 +1008,61 @@ function copyAndGo(){
 }
 
 window.addEventListener("DOMContentLoaded",function(){ displayReview(false); });
+
+// ─── AMBIENT GOLD PARTICLES ───────────────────────────────────────
+(function() {
+  var canvas = document.getElementById('particles');
+  var ctx = canvas.getContext('2d');
+  var W, H, dpr;
+
+  function resize() {
+    dpr = window.devicePixelRatio || 1;
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.scale(dpr, dpr);
+  }
+  window.addEventListener('resize', function() { resize(); });
+  resize();
+
+  function Particle() {
+    this.reset(true);
+  }
+  Particle.prototype.reset = function(init) {
+    this.x  = Math.random() * W;
+    this.y  = init ? Math.random() * H : H + 8;
+    this.r  = Math.random() * 1.4 + 0.4;
+    this.vx = (Math.random() - 0.5) * 0.25;
+    this.vy = -(Math.random() * 0.35 + 0.1);
+    this.life = Math.random() * Math.PI; // random phase start
+    this.speed = 0.006 + Math.random() * 0.006;
+  };
+
+  var particles = [];
+  for (var i = 0; i < 28; i++) { particles.push(new Particle()); }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    for (var i = 0; i < particles.length; i++) {
+      var p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life += p.speed;
+      if (p.y < -12) { p.reset(false); continue; }
+      var alpha = Math.sin(p.life) * 0.45;
+      if (alpha < 0) { p.reset(false); continue; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(212,168,82,' + alpha.toFixed(3) + ')';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
 </script>
 </body>
 </html>
